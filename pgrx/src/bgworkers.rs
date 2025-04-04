@@ -435,6 +435,7 @@ pub struct BackgroundWorkerBuilder {
     bgw_extra: String,
     bgw_notify_pid: pg_sys::pid_t,
     shared_memory_startup_fn: Option<unsafe extern "C" fn()>,
+    bgw_oom_score_adj: String,
 }
 
 impl BackgroundWorkerBuilder {
@@ -457,6 +458,7 @@ impl BackgroundWorkerBuilder {
             bgw_extra: "".to_string(),
             bgw_notify_pid: 0,
             shared_memory_startup_fn: None,
+            bgw_oom_score_adj: "".to_string(),
         }
     }
 
@@ -656,6 +658,7 @@ impl<'a> From<&'a BackgroundWorkerBuilder> for pg_sys::BackgroundWorker {
             bgw_main_arg: builder.bgw_main_arg,
             bgw_extra: RpgffiChar128::from(&builder.bgw_extra[..]).0,
             bgw_notify_pid: builder.bgw_notify_pid,
+            bgw_oom_score_adj: RpgffiChar::from(&builder.bgw_oom_score_adj[..]).0,
         };
 
         bgw
